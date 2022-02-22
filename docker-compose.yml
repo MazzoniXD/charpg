@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  charpg:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - MAVEN_VERSION=3.8.4
+        - JDK_VERSION=17
+    image: thiagomazzoni/charpg
+    container_name: charpg
+    hostname: charpg
+    ports:
+      - '8080:8080'
+      - '5005:5005'
+  db:
+    image: postgres
+    container_name: charpgdb
+    hostname: charpgdb
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=charpgdb
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - .:/var/lib/postgres/data

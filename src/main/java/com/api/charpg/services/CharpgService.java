@@ -9,6 +9,9 @@ import javax.transaction.Transactional;
 import com.api.charpg.models.Charpg;
 import com.api.charpg.repositories.CharpgRepository;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,4 +40,5 @@ public class CharpgService {
     public void delete(Charpg charpgModel) {
         charpgRepository.delete(charpgModel);
     }
+
 }

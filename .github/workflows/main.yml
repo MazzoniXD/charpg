@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      -main
+      - main
 name: Enviando o Docker desse projeto
 jobs:
   container:
@@ -16,8 +16,8 @@ jobs:
       if: github.event_name == 'pull_request'
       uses: docker/login-action@v1
       with:
-        username: ${{secrets.DOCKERHUB_USERNAME}}
-        password: ${{secrets.DOCKERHUB_TOKEN}}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Set up Docker Buildx
       if: github.event_name == 'pull_request'
@@ -31,4 +31,5 @@ jobs:
       with:
         context: .
         file: ./docker-compose
-        tags: ${{secrets.DOCKERHUB_USERNAME}}/charpg
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/charpg
+        

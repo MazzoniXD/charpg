@@ -4,9 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - MAVEN_VERSION=3.8.4
-        - JDK_VERSION=17
     image: thiagomazzoni/charpg
     container_name: charpg
     hostname: charpg

@@ -1,14 +1,10 @@
-ARG MAVEN_VERSION
-ARG JDK_VERSION
-
-
-FROM maven:${MAVEN_VERSION} as dependencies
+FROM maven:3.8.4 as dependencies
 WORKDIR /app
 COPY . . 
 RUN mvn clean install -DskipTests
 
 
-FROM openjdk:${JDK_VERSION}
+FROM openjdk:17
 WORKDIR /app
 ENTRYPOINT ["/entrypoint.sh"]
 COPY .docker/entrypoint.sh /entrypoint.sh

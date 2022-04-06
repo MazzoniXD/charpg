@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
 env:
-  DOCKER_TAG: ${{ GITHUB_REF }}
+  DOCKER_TAG: ${{ GITHUB_SHA }}
 
 jobs:
   ci:
@@ -72,4 +72,4 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-          docker-compose -f /srv/charpg/docker-compose.yml up -d --force-recreate --remove-orphans
+            docker-compose -f /srv/charpg/docker-compose.yml up -d --force-recreate --remove-orphans

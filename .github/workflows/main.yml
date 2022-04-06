@@ -33,6 +33,7 @@ jobs:
         context: .
         file: ./Dockerfile
         tags: ${{env.DOCKER_USER}}/charpg:${{ env.DOCKER_TAG }}
+        push: true
   cd:    
     name: Deploy Application
     runs-on: ubuntu-latest

@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
 env:
-  DOCKER_TAG: ${{ GITHUB_SHA }}
+  DOCKER_TAG: ${{ github.sha }}
 
 jobs:
   ci:

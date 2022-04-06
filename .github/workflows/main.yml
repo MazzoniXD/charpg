@@ -71,5 +71,5 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
-          script: 
+          script: |
           docker-compose -f /srv/charpg/docker-compose.yml up -d --force-recreate --remove-orphans

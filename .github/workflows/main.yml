@@ -5,6 +5,8 @@ on:
       - 'main'
 env:
   DOCKER_TAG: ${{ github.sha }}
+  DOCKER_TOKEN: ${{secrets.DOCKERHUB_TOKEN}}
+  DOCKER_USER: ${{secrets.DOCKERHUB_USERNAME}}
 
 jobs:
   ci:
@@ -17,8 +19,8 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
-        username: ${{secrets.DOCKERHUB_USERNAME}}
-        password: ${{secrets.DOCKERHUB_TOKEN}}
+        username: ${{env.DOCKER_USER}}
+        password: ${{env.DOCKER_TOKEN}}
 
     - name: Set up Docker Buildx
       id: buildx
@@ -30,7 +32,7 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
-        tags: ${{secrets.DOCKERHUB_USERNAME}}/charpg:${{ env.DOCKER_TAG }}
+        tags: ${{env.DOCKER_USER}}/charpg:${{ env.DOCKER_TAG }}
   cd:    
     name: Deploy Application
     runs-on: ubuntu-latest
@@ -42,14 +44,14 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
           username: "ubuntu"
-          envs: DOCKER_TAG
+          envs: DOCKER_TAG, DOCKER_USER
           script: |
             mkdir -p ~/charpg
             cat << EOF > ~/charpg/docker-compose.yml
             version: '3.9'
             services:
               charpg:
-                image: thiagomazzoni/charpg:${DOCKER_TAG}
+                image: ${DOCKER_USER}/charpg:${DOCKER_TAG}
                 container_name: charpg
                 hostname: charpg
                 ports:

@@ -41,6 +41,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_KEY }}
+          username: "ubuntu"
           envs: DOCKER_TAG
           script: |
             mkdir -p /srv/charpg

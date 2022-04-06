@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - 'main'
+env:
+  DOCKER_TAG: ${{ GITHUB_REF }}
+
 jobs:
   ci:
     name: Build and Test Application
@@ -27,5 +30,46 @@ jobs:
       with:
         context: .
         file: ./Dockerfile
-        tags: ${{secrets.DOCKERHUB_USERNAME}}/charpg
-    
+        tags: ${{secrets.DOCKERHUB_USERNAME}}/charpg:${{ env.DOCKER_TAG }}
+  cd:    
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    needs: [ ci ]
+    steps:
+      - name: Create compose on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: DOCKER_TAG
+          script: |
+            mkdir -p /srv/charpg
+            cat << EOF > /srv/charpg/docker-compose.yml
+            version: '3.9'
+            services:
+              charpg:
+                image: thiagomazzoni/charpg:${DOCKER_TAG}
+                container_name: charpg
+                hostname: charpg
+                ports:
+                  - '8080:8080'
+              db:
+                image: postgres
+                container_name: charpgdb
+                hostname: charpgdb
+                environment:
+                  - POSTGRES_DB=charpgdb
+                  - POSTGRES_USERNAME=postgres
+                  - POSTGRES_PASSWORD=postgres
+                volumes:
+                  - .:/var/lib/postgres/data
+
+            EOF
+
+      - name: Create compose on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          script: 
+          docker-compose -f /srv/charpg/docker-compose.yml up -d --force-recreate --remove-orphans

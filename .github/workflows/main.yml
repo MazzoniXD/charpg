@@ -68,7 +68,7 @@ jobs:
       
       - name: Set Host Output
         id: public_ip
-        run: echo "::set-output name=ip::$(terraform output public_ip)"
+        run: echo "::set-output name=ip::$(terraform output -no-color -raw public_ip)"
 
   cd:    
     name: Deploy Application

@@ -80,7 +80,7 @@ jobs:
       - name: Create compose on server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ needs.provision.outputs.publicid }}
+          host: '${{ needs.provision.outputs.publicid }}'
           key: ${{ secrets.SSH_KEY }}
           username: "ubuntu"
           envs: DOCKER_TAG, DOCKER_USER

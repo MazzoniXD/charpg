@@ -73,8 +73,6 @@ jobs:
           OUTPUT=$(terraform output -no-color -raw public_ip)
           echo "::set-output name=publicip::${OUTPUT}"
 
-      - run: echo ${{ steps.vars.outputs.publicip }}
-
   cd:    
     name: Deploy Application
     runs-on: ubuntu-latest

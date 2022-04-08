@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ ci ]
     outputs:
-      publicid: ${{ steps.public_ip.outputs.ip }}
+      publicid: ${{ steps.vars.outputs.ip }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -67,12 +67,12 @@ jobs:
         run: terraform apply -auto-approve
       
       - name: Set Host Output
-        id: public_ip
+        id: vars
         run: |
           OUTPUT=$(terraform output -no-color -raw public_ip)
-          echo "::set-output name=ip::${OUTPUT}"
+          echo "::set-output name=publicip::${OUTPUT}"
 
-      - run: echo ${{ steps.public_ip.outputs.ip }}
+      - run: echo ${{ steps.vars.outputs.publicip }}
 
   cd:    
     name: Deploy Application
